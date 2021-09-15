@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="字节跳动一面">
+    <style>
+        .container {
+            width: 80%;
+            height: 400px;
+            transform: translateY(50%);
+        }
+        
+        .container .content {
+            display: flex;
+            color: #333333;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <p>以下是字节的面试题</p>
+        <code>
+            <pre>
+            const obj = {
+                "selector": {
+                  "to": {
+                    "toutiao": "FE coder"
+                  }
+                },
+                "target": [
+                  1,
+                  2,
+                  {
+                    "name": "byted"
+                  }
+                ]
+              };
+              console.log(get(obj, 'selector.to.toutiao'))
+              //FE coder
+              console.log(get(obj, 'target[2].name'))
+              //byted
+            </pre>
+         </code>
+        <div class="content">
+            <div>
+                <code>
+                    <pre>
+                    const obj = {
+                        selector: {
+                          to: { toutiao: 'FE coder' }
+                        },
+                        table: [1, 2,  { name: '123' } ]
+                     }
+                     function get(obj, param) {
+                       let array = param.split('.')
+                       const index = array.length
+                       let list = array.map(item=>{
+                          if(item.indexOf('[')!=-1) {
+                            const str = item.split('[')
+                            const key = str[1].split(']')
+                            const items = { name: str[0], keyValue: key[0] }
+                           return items
+                          } else{
+                              const items = { name:item }
+                              return items
+                          }
+                        })
+                       let name = JSON.parse(JSON.stringify(obj))
+                         for(let i=0; i< index; i++) {
+                              name = list[i].keyValue!=undefined ? name[list[i].name][list[i].keyValue] : name[list[i].name]  
+                            
+                         }
+                         return name
+                     }
+                    </pre>
+                 </code>
+            </div>
+            <div>
+                <div>
+                    <p> console.log(get(obj, 'selector.to.toutiao'))</p>
+                    <p id="result1"></p>
+                </div>
+                <div>
+                    <p>console.log(get(obj, 'target[2].name'))</p>
+                    <p id="result2"></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    const obj = {
+        "selector": {
+            "to": {
+                "toutiao": "FE coder"
+            }
+        },
+        "target": [
+            1,
+            2, {
+                "name": "byted"
+            }
+        ]
+    };
+
+    function get(obj, param) {
+        let array = param.split('.')
+        const index = array.length
+        let list = array.map(item => {
+            if (item.indexOf('[') != -1) {
+                const str = item.split('[')
+                const key = str[1].split(']')
+                const items = {
+                    name: str[0],
+                    keyValue: key[0]
+                }
+                return items
+            } else {
+                const items = {
+                    name: item
+                }
+                return items
+            }
+        })
+        let name = JSON.parse(JSON.stringify(obj))
+        for (let i = 0; i < index; i++) {
+            name = list[i].keyValue != undefined ? name[list[i].name][list[i].keyValue] : name[list[i].name]
+
+        }
+        return name
+    }
+    console.log(get(obj, 'selector.to.toutiao'))
+    console.log(get(obj, 'target[2].name'))
+    var text1 = get(obj, 'selector.to.toutiao')
+    var text2 = get(obj, 'target[2].name')
+    document.getElementById('result1').innerHTML = text1
+    document.getElementById('result2').innerHTML = text2
+</script>
+
+</html>
